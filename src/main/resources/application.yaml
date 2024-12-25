@@ -1,0 +1,29 @@
+wikimedia:
+  host: https://stream.wikimedia.org/v2/stream
+  accept: application/json
+  accept-encoding: gzip
+  api-user-agent: ${WIKIMEDIA_API_USER_AGENT}
+
+spring:
+  application:
+    name: yeet.stream
+  threads:
+    virtual:
+      enabled: true
+  kafka:
+    bootstrap-servers: ${KAFKA_URL:localhost:29092}
+    admin:
+      security:
+        protocol: ${KAFKA_SECURITY_PROTOCOL:SASL_PLAINTEXT}
+      properties:
+        partitions: ${KAFKA_TOPIC_PARTITIONS:1}
+        replicas: ${KAFKA_TOPIC_REPLICAS:1}
+        sasl-mechanism: ${KAFKA_SASL_MECHANISM:PLAIN}
+        jaas-config: ${KAFKA_JAAS_CONFIG:org.apache.kafka.common.security.plain.PlainLoginModule required username='${KAFKA_USERNAME:user}' password='${KAFKA_PASSWORD:bitnami}';}
+        callback-handler: ${KAFKA_SASL_CALLBACK_HANDLER:}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
